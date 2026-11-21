@@ -3,13 +3,13 @@
 	"version": "1.3.1",
 	"description": "Community node for integrating n8n workflows with Domus CRM API 3.0",
 	"license": "MIT",
-	"homepage": "https://github.com/sebaspi0922/n8n-nodes-domus#readme",
+	"homepage": "https://github.com/Domus-Tech-SAS/n8n-nodes-domus#readme",
 	"bugs": {
-		"url": "https://github.com/sebaspi0922/n8n-nodes-domus/issues"
+		"url": "https://github.com/Domus-Tech-SAS/n8n-nodes-domus/issues"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/sebaspi0922/n8n-nodes-domus.git"
+		"url": "git+https://github.com/Domus-Tech-SAS/n8n-nodes-domus.git"
 	},
 	"keywords": [
 		"n8n-community-node-package",
