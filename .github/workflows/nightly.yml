@@ -24,7 +24,7 @@ concurrency:
 
 jobs:
   nightly:
-    if: github.repository == 'sebaspi0922/n8n-nodes-domus'
+    if: github.repository == 'Domus-Tech-SAS/n8n-nodes-domus'
     runs-on: ubuntu-latest
     timeout-minutes: 45
 
@@ -77,7 +77,7 @@ jobs:
 
   write-cycle:
     if: >
-      github.repository == 'sebaspi0922/n8n-nodes-domus'
+      github.repository == 'Domus-Tech-SAS/n8n-nodes-domus'
       && github.event_name == 'workflow_dispatch'
       && inputs.write_tests
     runs-on: ubuntu-latest
