@@ -75,6 +75,17 @@ jobs:
           DOMUS_TEST_WRITE: '0'
           N8N_BASE_URL: http://127.0.0.1:5680
 
+      - name: Upload Playwright failure artifacts
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: nightly-playwright-results
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 7
+          if-no-files-found: ignore
+
   write-cycle:
     if: >
       github.repository == 'Domus-Tech-SAS/n8n-nodes-domus'

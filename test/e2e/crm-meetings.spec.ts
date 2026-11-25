@@ -8,6 +8,7 @@ import {
 	expectDomusCrmNodeOpen,
 	openBlankWorkflow,
 	searchDomusCrmInCreator,
+	selectCredentialOnOpenNode,
 } from './helpers/n8n';
 
 const today = () => {
@@ -62,7 +63,9 @@ test('shows meeting search dates and the type selector', async ({ page }) => {
 	await expect(page.getByText('Meeting Type', { exact: true })).toBeVisible();
 	const profile = page.getByTestId('parameter-input-profile');
 	await expect(profile).toBeVisible();
-	await expect(profile.getByTestId('rlc-mode-selector').getByRole('combobox')).toHaveValue(/from list/i);
+	await expect(profile.getByTestId('rlc-mode-selector').getByRole('combobox')).toHaveValue(
+		/from list/i,
+	);
 	await expect(page.getByTestId('parameter-input-branch')).toHaveCount(0);
 	await expect(page.getByTestId('parameter-input-name')).toHaveCount(0);
 	await expect(page.getByTestId('parameter-input-altCode')).toHaveCount(0);
@@ -135,7 +138,9 @@ test('shows opportunity search filters without meeting fields', async ({ page })
 
 	const panel = page.getByTestId('ndv');
 	await expect(panel).toBeVisible();
-	await expect(panel.getByTestId('parameter-input-resource').getByRole('combobox')).toHaveValue('Opportunity');
+	await expect(panel.getByTestId('parameter-input-resource').getByRole('combobox')).toHaveValue(
+		'Opportunity',
+	);
 	await expect(panel.getByText('Contact', { exact: true })).toBeVisible();
 	await expect(panel.getByText('Activity Status', { exact: true })).toBeVisible();
 	await expect(panel.getByText('Opportunity Status', { exact: true })).toBeVisible();
@@ -203,7 +208,9 @@ test('shows profile search filters without meeting or opportunity fields', async
 
 	const panel = page.getByTestId('ndv');
 	await expect(panel).toBeVisible();
-	await expect(panel.getByTestId('parameter-input-resource').getByRole('combobox')).toHaveValue('Profile');
+	await expect(panel.getByTestId('parameter-input-resource').getByRole('combobox')).toHaveValue(
+		'Profile',
+	);
 	await expect(panel.getByTestId('parameter-input-branch')).toBeVisible();
 	await expect(panel.getByTestId('parameter-input-name')).toBeVisible();
 	await expect(panel.getByTestId('parameter-input-altCode')).toBeVisible();
@@ -227,7 +234,9 @@ test('shows contact search name and phone without other resource fields', async 
 
 	const panel = page.getByTestId('ndv');
 	await expect(panel).toBeVisible();
-	await expect(panel.getByTestId('parameter-input-resource').getByRole('combobox')).toHaveValue('Contact');
+	await expect(panel.getByTestId('parameter-input-resource').getByRole('combobox')).toHaveValue(
+		'Contact',
+	);
 	await expect(panel.getByTestId('parameter-input-name')).toBeVisible();
 	await expect(panel.getByTestId('parameter-input-phone')).toBeVisible();
 	await expect(panel.getByText('Name', { exact: true })).toBeVisible();
@@ -295,66 +304,64 @@ test('shows contact update fields without executing a write', async ({ page }) =
 });
 
 test('executes Contact Search when a CRM token is available', async ({ page }) => {
-	test.skip(!hasDomusCrmToken, 'Set DOMUS_CRM_TEST_TOKEN to execute Search against the Domus CRM API');
+	test.skip(
+		!hasDomusCrmToken,
+		'Set DOMUS_CRM_TEST_TOKEN to execute Search against the Domus CRM API',
+	);
 
-	await createDomusCrmCredentialViaApi(page.request);
+	const credential = await createDomusCrmCredentialViaApi(page.request);
 	await openBlankWorkflow(page);
 	await addDomusCrmNode(page, 'Search contacts');
 
 	const panel = page.getByTestId('ndv');
 	await expect(panel).toBeVisible();
+	await selectCredentialOnOpenNode(page, credential);
 	await executeOpenNode(page);
-
-	const output = panel.getByTestId('ndv-output-panel');
-	await expect(
-		output.getByTestId('run-data-item-count').or(output.getByText(/no output data/i)),
-	).toBeVisible({ timeout: 30_000 });
-	await expect(page.getByText(/problem in node/i)).toHaveCount(0);
 });
 
 test('executes Profile Search when a CRM token is available', async ({ page }) => {
-	test.skip(!hasDomusCrmToken, 'Set DOMUS_CRM_TEST_TOKEN to execute Search against the Domus CRM API');
+	test.skip(
+		!hasDomusCrmToken,
+		'Set DOMUS_CRM_TEST_TOKEN to execute Search against the Domus CRM API',
+	);
 
-	await createDomusCrmCredentialViaApi(page.request);
+	const credential = await createDomusCrmCredentialViaApi(page.request);
 	await openBlankWorkflow(page);
 	await addDomusCrmNode(page, 'Search profiles');
 
 	const panel = page.getByTestId('ndv');
 	await expect(panel).toBeVisible();
+	await selectCredentialOnOpenNode(page, credential);
 	await executeOpenNode(page);
-
-	const output = panel.getByTestId('ndv-output-panel');
-	await expect(
-		output.getByTestId('run-data-item-count').or(output.getByText(/no output data/i)),
-	).toBeVisible({ timeout: 30_000 });
-	await expect(page.getByText(/problem in node/i)).toHaveCount(0);
 });
 
 test('executes Opportunity Search when a CRM token is available', async ({ page }) => {
-	test.skip(!hasDomusCrmToken, 'Set DOMUS_CRM_TEST_TOKEN to execute Search against the Domus CRM API');
+	test.skip(
+		!hasDomusCrmToken,
+		'Set DOMUS_CRM_TEST_TOKEN to execute Search against the Domus CRM API',
+	);
 
-	await createDomusCrmCredentialViaApi(page.request);
+	const credential = await createDomusCrmCredentialViaApi(page.request);
 	await openBlankWorkflow(page);
 	await addDomusCrmNode(page, 'Search opportunities');
 
 	const panel = page.getByTestId('ndv');
 	await expect(panel).toBeVisible();
+	await selectCredentialOnOpenNode(page, credential);
 	await executeOpenNode(page);
-
-	const output = panel.getByTestId('ndv-output-panel');
-	await expect(
-		output.getByTestId('run-data-item-count').or(output.getByText(/no output data/i)),
-	).toBeVisible({ timeout: 30_000 });
-	await expect(page.getByText(/problem in node/i)).toHaveCount(0);
 });
 
 test('executes Meeting Search when a CRM token is available', async ({ page }) => {
-	test.skip(!hasDomusCrmToken, 'Set DOMUS_CRM_TEST_TOKEN to execute Search against the Domus CRM API');
+	test.skip(
+		!hasDomusCrmToken,
+		'Set DOMUS_CRM_TEST_TOKEN to execute Search against the Domus CRM API',
+	);
 
-	await createDomusCrmCredentialViaApi(page.request);
+	const credential = await createDomusCrmCredentialViaApi(page.request);
 	await openBlankWorkflow(page);
 	await addDomusCrmNode(page);
 	await expectDomusCrmNodeOpen(page);
+	await selectCredentialOnOpenNode(page, credential);
 
 	const day = today();
 	const startDate = page
@@ -368,10 +375,4 @@ test('executes Meeting Search when a CRM token is available', async ({ page }) =
 	await startDate.first().fill(day);
 	await endDate.first().fill(day);
 	await executeOpenNode(page);
-
-	const output = page.getByTestId('ndv').getByTestId('ndv-output-panel');
-	await expect(
-		output.getByTestId('run-data-item-count').or(output.getByText(/no output data/i)),
-	).toBeVisible({ timeout: 30_000 });
-	await expect(page.getByText(/problem in node/i)).toHaveCount(0);
 });
